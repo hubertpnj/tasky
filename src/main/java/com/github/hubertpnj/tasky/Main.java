@@ -1,7 +1,5 @@
 package com.github.hubertpnj.tasky;
 
-import com.github.hubertpnj.tasky.graph.Graph;
-import com.github.hubertpnj.tasky.graph.IntGraph;
 import com.github.hubertpnj.tasky.sort.IntDFSTopoSort;
 import com.github.hubertpnj.tasky.sort.TopoSort;
 
@@ -9,16 +7,7 @@ import java.util.*;
 
 public class Main {
 
-    private static final TopoSort<Integer> SORT = new IntDFSTopoSort();
-
-    private static final class Edge<V> {
-        private final V vertex1, vertex2;
-
-        public Edge(V vertex1, V vertex2) {
-            this.vertex1 = vertex1;
-            this.vertex2 = vertex2;
-        }
-    }
+    private static final TopoSort<Integer> INDEX_SORT = new IntDFSTopoSort();
 
     public static void main(String[] args) {
         // "A B"
@@ -29,7 +18,7 @@ public class Main {
 
         // "D A C B"
 
-        List<Edge<String>> edges = new ArrayList<>();
+        List<Pair<String, String>> taskPriority = new ArrayList<>();
 
         Scanner lineScanner = new Scanner(System.in);
 
@@ -41,36 +30,12 @@ public class Main {
 
             Scanner tokenScanner = new Scanner(line);
 
-            var vertex1 = tokenScanner.next();
-            var vertex2 = tokenScanner.next();
+            var task1 = tokenScanner.next();
+            var task2 = tokenScanner.next();
 
-            edges.add(new Edge<>(vertex1, vertex2));
+            taskPriority.add(new Pair<>(task1, task2));
         }
 
-        Map<String, Integer> vertexIndex = new HashMap<>();
-
-        int index = 0;
-
-        for (var edge : edges)
-            for (var vertex : List.of(edge.vertex1, edge.vertex2))
-                if (!vertexIndex.containsKey(vertex))
-                    vertexIndex.put(vertex, index++);
-
-        String[] indexVertex = new String[vertexIndex.size()];
-
-        for (var entry : vertexIndex.entrySet()) {
-            index = entry.getValue();
-            var vertex = entry.getKey();
-
-            indexVertex[index] = vertex;
-        }
-
-        Graph<Integer> graph = new IntGraph();
-
-        for (var edge : edges)
-            graph.addEdge(vertexIndex.get(edge.vertex1), vertexIndex.get(edge.vertex1));
-
-        Collection<Integer> order = SORT.sort(graph);
-        order.stream().map(i -> indexVertex[i]).forEach(System.out::println);
+        System.out.println(Tasks.order(taskPriority, INDEX_SORT));
     }
 }
