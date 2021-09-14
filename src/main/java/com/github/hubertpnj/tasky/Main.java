@@ -30,11 +30,40 @@ public class Main {
         // "D A C B"
 
         List<Edge<String>> edges = new ArrayList<>();
-        // TODO
+
+        Scanner lineScanner = new Scanner(System.in);
+
+        while (lineScanner.hasNextLine()) {
+            String line = lineScanner.nextLine();
+
+            if (line.isBlank())
+                break;
+
+            Scanner tokenScanner = new Scanner(line);
+
+            var vertex1 = tokenScanner.next();
+            var vertex2 = tokenScanner.next();
+
+            edges.add(new Edge<>(vertex1, vertex2));
+        }
 
         Map<String, Integer> vertexIndex = new HashMap<>();
-        List<String> indexVertex = new ArrayList<>();
-        // TODO
+
+        int index = 0;
+
+        for (var edge : edges)
+            for (var vertex : List.of(edge.vertex1, edge.vertex2))
+                if (!vertexIndex.containsKey(vertex))
+                    vertexIndex.put(vertex, index++);
+
+        String[] indexVertex = new String[vertexIndex.size()];
+
+        for (var entry : vertexIndex.entrySet()) {
+            index = entry.getValue();
+            var vertex = entry.getKey();
+
+            indexVertex[index] = vertex;
+        }
 
         Graph<Integer> graph = new IntGraph();
 
@@ -42,6 +71,6 @@ public class Main {
             graph.addEdge(vertexIndex.get(edge.vertex1), vertexIndex.get(edge.vertex1));
 
         Collection<Integer> order = SORT.sort(graph);
-        order.stream().map(indexVertex::get).forEach(System.out::println);
+        order.stream().map(i -> indexVertex[i]).forEach(System.out::println);
     }
 }

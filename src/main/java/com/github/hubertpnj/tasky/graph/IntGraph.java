@@ -1,7 +1,6 @@
 package com.github.hubertpnj.tasky.graph;
 
 import java.util.Collection;
-import java.util.Iterator;
 
 public class IntGraph implements Graph<Integer> {
 
