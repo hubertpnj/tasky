@@ -26,39 +26,33 @@ public class IntGraph implements Graph<Integer> {
     }
 
     @Override
-    public Iterator<Graph.Entry<Integer>> iterator() {
-        return new IntGraphIterator(this, 0);
+    public int size() {
+        return adjacency.length;
     }
 
-    private static final class IntGraphIterator implements Iterator<Graph.Entry<Integer>> {
+    @Override
+    public Iterator<Integer> iterator() {
+        return new IntRangeIterator(0, adjacency.length);
+    }
 
-        private IntGraph reference;
-        private int index;
+    private static final class IntRangeIterator implements Iterator<Integer> {
 
-        public IntGraphIterator(IntGraph reference, int index) {
-            this.reference = reference;
-            this.index = index;
+        private int start;
+        private final int stop;
+
+        public IntRangeIterator(int start, int stop) {
+            this.start = start;
+            this.stop = stop;
         }
 
         @Override
         public boolean hasNext() {
-            return index < reference.adjacency.length;
+            return start < stop;
         }
 
         @Override
-        public Graph.Entry<Integer> next() {
-            return new Graph.Entry<>() {
-
-                @Override
-                public Integer getVertex() {
-                    return index;
-                }
-
-                @Override
-                public Collection<Integer> getNeighbours() {
-                    return reference.getNeighbours(index);
-                }
-            };
+        public Integer next() {
+            return start++;
         }
     }
 }
