@@ -1,14 +1,9 @@
 package com.github.hubertpnj.tasky.sort;
 
 import com.github.hubertpnj.tasky.graph.Graph;
-import com.github.hubertpnj.tasky.graph.IntGraph;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
-// https://en.wikipedia.org/wiki/Topological_sorting#Depth-first_search
 public class IntDFSTopoSort implements TopoSort<Integer> {
 
     private enum Mark {
@@ -24,6 +19,8 @@ public class IntDFSTopoSort implements TopoSort<Integer> {
                 return;
         }
 
+
+
         marks[vertex] = Mark.TEMPORARY;
 
         for (int neighbour : graph.getNeighbours(vertex))
@@ -37,6 +34,7 @@ public class IntDFSTopoSort implements TopoSort<Integer> {
     public Collection<Integer> sort(Graph<Integer> graph) {
 
         List<Integer> vertexes = new ArrayList<>(graph.size());
+
         Mark[] marks = new Mark[graph.size()];
 
         Arrays.fill(marks, Mark.NONE);
@@ -48,6 +46,7 @@ public class IntDFSTopoSort implements TopoSort<Integer> {
                 visit(graph, vertex, vertexes, marks);
         }
 
+        Collections.reverse(vertexes);
         return vertexes;
     }
 }
